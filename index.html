@@ -42,6 +42,7 @@
     html, body {
         height: 100%;
         overflow-x: hidden;
+        scroll-behavior: smooth;
     }
 
     /* 全屏背景图容器 */
@@ -508,15 +509,14 @@
     // 平滑滚动
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function(e) {
-        e.preventDefault();
         const targetId = this.getAttribute('href');
         const targetElement = document.querySelector(targetId);
         
         if (targetElement) {
-          window.scrollTo({
-            top: targetElement.offsetTop - 80,
-            behavior: 'smooth'
-          });
+
+          e.preventDefault(); // 仅在有目标时阻止，确保无目标时使用默认跳转
+          // 直接使用浏览器原生滚动（依赖CSS的scroll-behavior: smooth）
+          targetElement.scrollIntoView();
           
           // 关闭移动端菜单
           if (!mobileMenu.classList.contains('hidden')) {
