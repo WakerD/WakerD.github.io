@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>清醒笔记 - AI时代的离线隐私笔记</title>
+    <meta name="description" content="清醒笔记，100%本地存储的隐私安全笔记，零信息收集，离线即可使用！">
+    <meta name="keywords" content="清醒笔记,离线笔记,隐私笔记,本地笔记">
+    <style>
+        /* 全局样式重置与基础设置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", sans-serif;
+        }
+        body {
+            color: #333;
+            background-color: #f8f9fa;
+            line-height: 1.6;
+        }
+        a {
+            text-decoration: none;
+            color: #2c3e50;
+        }
+        a:hover {
+            color: #3498db;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .section {
+            padding: 60px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .section:last-child {
+            border-bottom: none;
+        }
+        .title {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-weight: 700;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 40px;
+            font-weight: 400;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #3498db;
+            color: #fff !important;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid #3498db;
+            color: #3498db !important;
+        }
+        .btn-outline:hover {
+            background-color: #f0f7ff;
+        }
+        /* 导航栏样式（新增Logo相关样式） */
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0; /* 微调内边距适配Logo */
+        }
+        /* Logo样式核心修改 */
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        .logo-img {
+            height: 40px; /* Logo高度，可按需调整 */
+            width: auto;  /* 保持宽高比，防止变形 */
+            object-fit: contain;
+            margin-right: 8px; /* Logo与文字间距 */
+        }
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+        .nav-menu a {
+            font-size: 1rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .nav-menu .active {
+            color: #3498db;
+        }
+        /* 移动端导航适配 */
+        @media (max-width: 768px) {
+            .nav-menu {
+                gap: 15px;
+            }
+            .title {
+                font-size: 1.8rem;
+            }
+            .subtitle {
+                font-size: 1rem;
+            }
+            .section {
+                padding: 40px 0;
+            }
+            .logo-img {
+                height: 35px; /* 移动端缩小Logo */
+            }
+        }
+        @media (max-width: 480px) {
+            .nav {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .nav-menu {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .title {
+                font-size: 1.5rem;
+            }
+            .logo-img {
+                height: 30px;
+            }
+        }
+        /* 产品介绍区样式 */
+        .hero {
+            background: linear-gradient(120deg, #f5f7fa 0%, #e4eaf5 100%);
+            padding: 80px 0;
+            text-align: center;
+        }
+        .hero-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        .hero-desc {
+            font-size: 1.1rem;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto 40px;
+        }
+        .hero-sell {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 60px 0;
+        }
+        .sell-card {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .sell-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        .sell-card p {
+            color: #666;
+        }
+        @media (max-width: 768px) {
+            .hero {
+                padding: 60px 0;
+            }
+            .hero-title {
+                font-size: 2rem;
+            }
+        }
+        /* 功能亮点区样式 */
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .feature-card {
+            background: #fff;
+            padding: 35px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        .feature-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .feature-card h3::before {
+            content: "✓";
+            color: #2ecc71;
+            font-size: 1.4rem;
+        }
+        .feature-card p {
+            color: #666;
+        }
+        /* 下载反馈区样式 */
+        .download {
+            text-align: center;
+        }
+        .download-btn {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 40px 0 60px;
+        }
+        .feedback {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .feedback h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        .feedback-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            color: #666;
+        }
+        .feedback-item i {
+            color: #3498db;
+            font-size: 1.2rem;
+        }
+        /* 隐私政策跳转提示 */
+        .policy-tip {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        /* 页脚样式 */
+        footer {
+            background-color: #2c3e50;
+            color: #fff;
+            padding: 40px 0 20px;
+            margin-top: 40px;
+        }
+        .footer-content {
+            text-align: center;
+        }
+        .footer-content p {
+            margin-bottom: 15px;
+            opacity: 0.8;
+        }
+        .footer-link {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            list-style: none;
+            margin-bottom: 30px;
+        }
+        .footer-link a {
+            color: #fff;
+            opacity: 0.8;
+        }
+        .footer-link a:hover {
+            opacity: 1;
+            color: #3498db;
+        }
+        .copyright {
+            font-size: 0.9rem;
+            opacity: 0.6;
+        }
+        /* 锚点跳转平滑效果 */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <!-- 导航栏（新增Logo图片） -->
+    <header>
+        <div class="container nav">
+            <a href="#" class="nav-logo">
+                <!-- 替换为你的Logo图片地址 -->
+                <img src="../images/logo.png" alt="清醒笔记" class="logo-img">
+                清醒笔记
+            </a>
+            <ul class="nav-menu">
+                <li><a href="#intro" class="active">产品介绍</a></li>
+                <li><a href="privacy.html" target="_blank">隐私政策</a></li>
+                <li><a href="#download">下载反馈</a></li>
+                <li><a href="../index.html" target="_blank">返回首页</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- 产品介绍区 -->
+    <section class="hero" id="intro">
+        <div class="container">
+            <h1 class="hero-title">清醒笔记 - AI时代的离线隐私守护笔记</h1>
+            <p class="hero-desc">极简设计，聚焦实用，所有功能均围绕「AI时代的隐私保护」打造</p>
+            <div class="hero-sell">
+                <div class="sell-card">
+                    <h3>本地专属存储</h3>
+                    <p>所有笔记、图片、音频100%存储在设备本地，不上传云端/第三方服务器，数据归属权完全属于您</p>
+                </div>
+                <div class="sell-card">
+                    <h3>零信息收集</h3>
+                    <p>不收集设备标识符、行为日志、个人信息，无任何数据埋点，拒绝隐私泄露风险</p>
+                </div>
+                <div class="sell-card">
+                    <h3>本地加密保护</h3>
+                    <p>敏感笔记支持设备端加密存储，加密密钥仅保存在您的设备本地，无密钥无法访问，有效防止非法查看</p>
+                </div>
+            </div>
+            <a href="#download" class="btn">立即下载</a>
+        </div>
+    </section>
+
+    <!-- 下载与反馈区 -->
+    <section class="section download" id="download">
+        <div class="container">
+            <h2 class="title">立即下载 体验纯粹的离线笔记</h2>
+            <p class="subtitle">官方正版</p>
+            <div class="download-btn">
+                <a href="https://github.com/WakerD/qxnote/releases" class="btn"><i class="fa fa-android" aria-hidden="true"></i> 安卓版下载</a>
+                <!-- <a href="#" class="btn btn-outline"><i class="fa fa-apple" aria-hidden="true"></i> iOS版（TestFlight）</a> -->
+                <!-- <a href="#" class="btn btn-outline"><i class="fa fa-github" aria-hidden="true"></i> 源码地址</a> -->
+            </div>
+
+            <!-- 隐私政策跳转提示 -->
+            <div class="policy-tip">
+                点击查看 <a href="privacy.html" target="_blank" style="color: #3498db;">《清醒笔记隐私政策》</a> 完整条款
+            </div>
+
+            <div class="feedback">
+                <h3><i class="fa fa-comment-o" aria-hidden="true"></i> 问题反馈与支持</h3>
+                <div class="feedback-item">
+                    <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                    <span>官方邮箱：423128016@qq.com</span>
+                </div>
+                <div class="feedback-item">
+                    <i class="fa fa-github" aria-hidden="true"></i>
+                    <span>GitHub地址：<a href="https://github.com/WakerD/qxnote" target="_blank">https://github.com/WakerD/qxnote</a></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container footer-content">
+            <ul class="footer-link">
+                <li><a href="#intro">产品介绍</a></li>
+                <li><a href="privacy.html" target="_blank">隐私政策</a></li>
+                <li><a href="#download">下载反馈</a></li>
+                <li><a href="../index.html" target="_blank">返回官网</a></li>
+            </ul>
+            <p>清醒笔记 - AI时代专注隐私保护的离线笔记应用</p>
+            <div class="copyright">© 2026 致敬(深圳)云计算技术有限责任公司 版权所有 | 官网：https://www.waker.host/</div>
+        </div>
+    </footer>
+
+    <script>
+        // 导航栏锚点激活状态切换
+        const navLinks = document.querySelectorAll('.nav-menu a');
+        const sections = document.querySelectorAll('section[id]');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
